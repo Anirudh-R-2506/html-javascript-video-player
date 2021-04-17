@@ -28,6 +28,7 @@
         </div>             
         <div class="container">
             <div class="video-container" id="video-container">
+              <div class="video-title hidden" style="vertical-align: top!important;color:#fff;" id="video-title"></div>
               <div class="playback-animation" id="playback-animation">
                 <svg class="playback-icons">
                   <use class="hidden" name='animate' href="#play-icon"></use>
@@ -237,11 +238,15 @@ const videoContainer = document.getElementById('video-container');
 const fullscreenIcons = fullscreenButton.querySelectorAll('use');
 const pipButton = document.getElementById('pip-button');
 const capbtn = document.getElementById('captions-button');
+const vidtitle = document.getElementById('video-title');
+
+vidtitle.innerHTML = '<center>'+document.getElementById('vid_src').getAttribute('src')+'</center><br>'    
 
 const videoWorks = !!document.createElement('video').canPlayType;
 if (videoWorks) {
   video.controls = false;
   videoControls.classList.remove('hidden');
+  vidtitle.classList.remove('hidden');
 }
 function togglePlay() {
   if (video.paused || video.ended) {
@@ -554,10 +559,12 @@ function hideControls() {
   }
 
   videoControls.classList.add('hide');
+  vidtitle.classList.add('hide');
 }
 
 function showControls() {
   videoControls.classList.remove('hide');
+  vidtitle.classList.remove('hide');
 }
 
 function toggleMute(){
