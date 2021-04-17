@@ -884,6 +884,10 @@ var theVideo = document.getElementById("video");
   function update(){
     document.getElementById('volume').value = document.getElementById('video').volume;
 }
-setInterval(update,5);   
+setInterval(update,5);
+function reset(){
+        document.getElementById('meh').value = ';';
+    }    
+window.onfocus = reset()
 </script>
 </body></html>
