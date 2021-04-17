@@ -239,8 +239,8 @@ const fullscreenIcons = fullscreenButton.querySelectorAll('use');
 const pipButton = document.getElementById('pip-button');
 const capbtn = document.getElementById('captions-button');
 const vidtitle = document.getElementById('video-title');
-
-vidtitle.innerHTML = '<center>'+document.getElementById('vid_src').getAttribute('src')+'</center><br>'    
+var ab = document.getElementById('vid_src').getAttribute('src').split('/');
+vidtitle.innerHTML = '<center>'+ab[ab.length-1]+'</center><br>'
 
 const videoWorks = !!document.createElement('video').canPlayType;
 if (videoWorks) {
