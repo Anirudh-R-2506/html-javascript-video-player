@@ -2,6 +2,8 @@
 
 A lightweight javascript based video player to watch locally stored videos.
 
+DEMO -> https://jsvideoplayer.000webhostapp.com/
+
 # FEATURES
 
 -> Custom controls and shortcut keys
