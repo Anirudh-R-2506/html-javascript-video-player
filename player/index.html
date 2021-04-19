@@ -1,0 +1,925 @@
+<html>
+    <head>
+        <link rel="stylesheet" href="style.css">
+        <link rel="icon" href="https://www.youtube.com/s/desktop/677734b5/img/favicon_48.png">
+        <script>
+          window.onload = function(){
+            const s = sessionStorage.getItem('s');
+            const c = sessionStorage.getItem('c');
+            const t = sessionStorage.getItem('t');
+            var ch = 1;
+            if (s===null || t===null){
+              ch = 0;
+              window.open('/','_top');
+            }
+            document.getElementById('video-title').innerHTML = '<center><br>'+t+'</center>';
+            document.getElementById('video').setAttribute('src',s);
+            const a = '<track label="English" kind="subtitles" srclang="en" src="';
+            const b = '" default>';
+            if (c){
+              document.getElementById('video').innerHTML += a+c+b;
+            }
+            if (ch == 1){
+                document.getElementById('root').style.display = 'block';}
+          };
+        </script>
+    </head>
+<body>
+    <div id="root" style="display:none!important;">
+    <input type="text" id="meh" style="display: none;">
+<div id="wrap_video">
+
+    <div id="video_box">
+        <div id="video_overlays">
+            <form action='' id="form-sub" align="center" autocomplete="off">
+                <input type="text" id='goto' style="width: 60%;margin-top: 50%;" placeholder="hours:min:sec (or) min:sec (or) sec">
+                <input type="submit" style="display: none;">
+            </form>
+        </div>
+        <div id="back">
+            <form action='' id="form-sub1" align="center" autocomplete="off">
+                <input type="number" id='b1' style="width: 60%;margin-top: 50%;" placeholder="sec">
+                <input type="submit" style="display: none;">
+            </form>
+        </div>
+        <div id="fwd">
+            <form action='' id="form-sub2" align="center" autocomplete="off">
+                <input type="number" id='f1' style="width: 60%;margin-top: 50%;" placeholder="sec">
+                <input type="submit" style="display: none;">
+            </form>
+        </div>             
+        <div class="container">
+            <div class="video-container" id="video-container">
+              <div class="video-title hidden" style="vertical-align: top!important;color:#fff;" id="video-title">
+            </div>
+              <div class="playback-animation" id="playback-animation">
+                <svg class="playback-icons">
+                  <use class="hidden" name='animate' href="#play-icon"></use>
+                  <use href="#pause"></use>
+                </svg>
+              </div>
+              <div class="volume-m-cont" id="volume-m-cont">
+                <svg class="playback-icons2">
+                  <use name='animate' href="#volume-mute2"></use>                  
+                </svg>                                
+              </div>
+              <div class="volume-cont" id="volume-cont">
+                <svg class="playback-icons2">
+                  <use name='animate' href="#vol-logo"></use>                  
+                </svg>                                
+              </div>
+              <div class="volume-percent" id="volume-percent"></div>              
+              <div class="fwd-cont" id="fwd-cont">
+                <svg class="playback-icons2">
+                  <use name='animate' href="#fwd-logo"></use>                  
+                </svg>                                
+              </div>
+              <div class="rwd-cont" id="rwd-cont">
+                <svg class="playback-icons2">
+                  <use name='animate' href="#rwd-logo"></use>                  
+                </svg>                                
+              </div>
+              <video width="100%" height="600" class="video" id="video" controls style="cursor: pointer!important;" onerror="exec();">
+              </video>
+        
+              <div class="video-controls hidden" id="video-controls">
+                <div class="video-progress">
+                  <progress id="progress-bar" value="0" min="0"></progress>
+                  <input class="seek" id="seek" value="0" min="0" type="range" step="1">
+                  <div class="seek-tooltip" id="seek-tooltip">
+                    00:00
+                  </div>
+                </div>
+        
+                <div class="bottom-controls">
+                  <div class="left-controls">
+                    <button data-title="Play (space)" id="play">
+                      <svg class="playback-icons">
+                        <use href="#play-icon"></use>
+                        <use class="hidden" href="#pause"></use>
+                      </svg>
+                    </button>
+        
+                    <div class="volume-controls">
+                      <button data-title="Mute (m)" class="volume-button" id="volume-button">
+                        <svg>
+                          <use class="hidden" href="#volume-mute"></use>
+                          <use class="hidden" href="#volume-low"></use>
+                          <use href="#volume-high"></use>
+                        </svg>
+                      </button>
+        
+                      <input class="volume" id="volume" value="1" data-mute="0.5" type="range" max="1" min="0" step="0.01">
+                    </div>
+        
+                    <div class="time">
+                      <time id="time-elapsed">00:00</time>
+                      <span> / </span>
+                      <time id="duration">00:00</time>
+                    </div>
+                  </div>
+        
+                  <div class="right-controls">
+                    <button data-title="Captions (c)" class="captions-button" id="captions-button">
+                      <svg>
+                        <use href="#captions-logo"></use>
+                      </svg>
+                    </button>
+                    <button data-title="PIP (p)" class="pip-button" id="pip-button">
+                      <svg>
+                        <use href="#pip"></use>
+                      </svg>
+                    </button>
+                    <button data-title="Full screen (f)" class="fullscreen-button" id="fullscreen-button">
+                      <svg>
+                        <use href="#fullscreen"></use>
+                        <use href="#fullscreen-exit" class="hidden"></use>
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <br><br>
+            <center><button id="sub" onclick="rese();">RESET</button></center>
+          </div>
+          <svg style="display: none">
+            <defs>
+              <symbol id="pause" viewBox="0 0 24 24">
+                <path d="M14.016 5.016h3.984v13.969h-3.984v-13.969zM6 18.984v-13.969h3.984v13.969h-3.984z"></path>
+              </symbol>
+        
+              <symbol id="play-icon" viewBox="0 0 24 24">
+                <path d="M8.016 5.016l10.969 6.984-10.969 6.984v-13.969z"></path>
+              </symbol>
+
+              <symbol id="seek-icon" viewBox="0 0 24 24">
+                <path d="M8.016 5.016l10.969 6.984-10.969 6.984v-13.969z"></path>
+              </symbol>
+        
+              <symbol id="volume-high" viewBox="0 0 24 24">
+              <path d="M14.016 3.234q3.047 0.656 5.016 3.117t1.969 5.648-1.969 5.648-5.016 3.117v-2.063q2.203-0.656 3.586-2.484t1.383-4.219-1.383-4.219-3.586-2.484v-2.063zM16.5 12q0 2.813-2.484 4.031v-8.063q1.031 0.516 1.758 1.688t0.727 2.344zM3 9h3.984l5.016-5.016v16.031l-5.016-5.016h-3.984v-6z"></path>
+              </symbol>
+              
+              <symbol id="vol-logo" viewBox="0 0 24 24">
+                <path d="M14.016 3.234q3.047 0.656 5.016 3.117t1.969 5.648-1.969 5.648-5.016 3.117v-2.063q2.203-0.656 3.586-2.484t1.383-4.219-1.383-4.219-3.586-2.484v-2.063zM16.5 12q0 2.813-2.484 4.031v-8.063q1.031 0.516 1.758 1.688t0.727 2.344zM3 9h3.984l5.016-5.016v16.031l-5.016-5.016h-3.984v-6z"></path>                
+              </symbol>   
+              
+              <symbol width="100%" height="100%" preserveAspectRatio="none" id="captions-logo" viewBox="0 0 36 36">
+                <path d="M11,11 C9.89,11 9,11.9 9,13 L9,23 C9,24.1 9.89,25 11,25 L25,25 C26.1,25 27,24.1 27,23 L27,13 C27,11.9 26.1,11 25,11 L11,11 Z M17,17 L15.5,17 L15.5,16.5 L13.5,16.5 L13.5,19.5 L15.5,19.5 L15.5,19 L17,19 L17,20 C17,20.55 16.55,21 16,21 L13,21 C12.45,21 12,20.55 12,20 L12,16 C12,15.45 12.45,15 13,15 L16,15 C16.55,15 17,15.45 17,16 L17,17 L17,17 Z M24,17 L22.5,17 L22.5,16.5 L20.5,16.5 L20.5,19.5 L22.5,19.5 L22.5,19 L24,19 L24,20 C24,20.55 23.55,21 23,21 L20,21 C19.45,21 19,20.55 19,20 L19,16 C19,15.45 19.45,15 20,15 L23,15 C23.55,15 24,15.45 24,16 L24,17 L24,17 Z" id='caption-btn' fill="#fff">
+                </path>
+                <!--<path d="M11,11 C9.9,11 9,11.9 9,13 L9,23 C9,24.1 9.9,25 11,25 L25,25 C26.1,25 27,24.1 27,23 L27,13 C27,11.9 26.1,11 25,11 L11,11 Z M11,17 L14,17 L14,19 L11,19 L11,17 L11,17 Z M20,23 L11,23 L11,21 L20,21 L20,23 L20,23 Z M25,23 L22,23 L22,21 L25,21 L25,23 L25,23 Z M25,19 L16,19 L16,17 L25,17 L25,19 L25,19 Z" fill="#fff" id='caption-btn'></path>-->
+              </symbol>
+              
+              <symbol id='fwd-logo' viewBox="0 0 50.000000 50.000000">
+                    <g transform="translate(0.000000,50.000000) scale(0.100000,-0.100000)"
+                    fill="#fff" stroke="none">
+                    <path d="M410 445 c0 -19 -2 -35 -5 -35 -2 0 -21 11 -41 25 -142 97 -344 -22
+                    -332 -197 8 -116 105 -208 218 -208 70 0 147 43 183 102 30 47 48 128 29 128
+                    -5 0 -13 -20 -16 -44 -14 -92 -102 -166 -198 -166 -60 0 -125 36 -163 89 -26
+                    37 -30 51 -30 109 0 80 25 129 88 170 57 38 153 39 212 2 l40 -25 -37 -3 c-58
+                    -5 -45 -22 17 -22 l55 0 0 55 c0 30 -4 55 -10 55 -5 0 -10 -16 -10 -35z"/>
+                    <path d="M186 315 c-3 -8 -12 -15 -21 -15 -8 0 -15 -4 -15 -10 0 -5 9 -10 20
+                    -10 18 0 20 -7 20 -55 0 -30 5 -55 10 -55 6 0 10 33 10 80 0 74 -10 101 -24
+                    65z"/>
+                    <path d="M260 315 c-18 -22 -22 -87 -8 -115 10 -18 22 -25 43 -25 37 0 58 35
+                    51 88 -5 46 -21 67 -51 67 -12 0 -28 -7 -35 -15z m58 -17 c15 -15 16 -63 2
+                    -89 -22 -41 -60 -10 -60 48 0 30 15 53 35 53 6 0 16 -5 23 -12z"/>
+                    </g>
+              </symbol>
+
+              <symbol id="rwd-logo" viewBox="0 0 50.000000 50.000000">
+                <g transform="translate(0.000000,50.000000) scale(0.100000,-0.100000)"
+fill="#fff" stroke="none">
+<path d="M70 425 l0 -55 55 0 c62 0 75 17 18 22 l-38 3 40 25 c59 37 155 36
+212 -2 63 -41 88 -90 88 -170 0 -58 -4 -72 -30 -109 -38 -53 -103 -89 -163
+-89 -96 0 -184 74 -198 166 -3 24 -11 44 -16 44 -19 0 -1 -81 29 -128 36 -59
+113 -102 183 -102 113 0 210 92 218 208 12 175 -190 294 -332 197 -20 -14 -39
+-25 -41 -25 -3 0 -5 16 -5 35 0 19 -4 35 -10 35 -5 0 -10 -25 -10 -55z"/>
+<path d="M186 315 c-3 -8 -12 -15 -21 -15 -8 0 -15 -4 -15 -10 0 -5 9 -10 20
+-10 18 0 20 -7 20 -55 0 -30 5 -55 10 -55 6 0 10 33 10 80 0 74 -10 101 -24
+65z"/>
+<path d="M260 315 c-18 -22 -22 -87 -8 -115 10 -18 22 -25 43 -25 37 0 58 35
+51 88 -5 46 -21 67 -51 67 -12 0 -28 -7 -35 -15z m58 -17 c15 -15 16 -63 2
+-89 -22 -41 -60 -10 -60 48 0 30 15 53 35 53 6 0 16 -5 23 -12z"/>
+</g>
+              </symbol>
+              
+              <symbol id="volume-low" viewBox="0 0 24 24">
+              <path d="M5.016 9h3.984l5.016-5.016v16.031l-5.016-5.016h-3.984v-6zM18.516 12q0 2.766-2.531 4.031v-8.063q1.031 0.516 1.781 1.711t0.75 2.32z"></path>
+              </symbol>
+        
+              <symbol id="volume-mute" viewBox="0 0 24 24">
+              <path d="M12 3.984v4.219l-2.109-2.109zM4.266 3l16.734 16.734-1.266 1.266-2.063-2.063q-1.547 1.313-3.656 1.828v-2.063q1.172-0.328 2.25-1.172l-4.266-4.266v6.75l-5.016-5.016h-3.984v-6h4.734l-4.734-4.734zM18.984 12q0-2.391-1.383-4.219t-3.586-2.484v-2.063q3.047 0.656 5.016 3.117t1.969 5.648q0 2.203-1.031 4.172l-1.5-1.547q0.516-1.266 0.516-2.625zM16.5 12q0 0.422-0.047 0.609l-2.438-2.438v-2.203q1.031 0.516 1.758 1.688t0.727 2.344z"></path>
+              </symbol>
+
+              <symbol id="volume-mute2" viewBox="0 0 24 24">
+                <path d="M12 3.984v4.219l-2.109-2.109zM4.266 3l16.734 16.734-1.266 1.266-2.063-2.063q-1.547 1.313-3.656 1.828v-2.063q1.172-0.328 2.25-1.172l-4.266-4.266v6.75l-5.016-5.016h-3.984v-6h4.734l-4.734-4.734zM18.984 12q0-2.391-1.383-4.219t-3.586-2.484v-2.063q3.047 0.656 5.016 3.117t1.969 5.648q0 2.203-1.031 4.172l-1.5-1.547q0.516-1.266 0.516-2.625zM16.5 12q0 0.422-0.047 0.609l-2.438-2.438v-2.203q1.031 0.516 1.758 1.688t0.727 2.344z"></path>
+                </symbol>
+        
+              <symbol id="fullscreen" viewBox="0 0 24 24">
+              <path d="M14.016 5.016h4.969v4.969h-1.969v-3h-3v-1.969zM17.016 17.016v-3h1.969v4.969h-4.969v-1.969h3zM5.016 9.984v-4.969h4.969v1.969h-3v3h-1.969zM6.984 14.016v3h3v1.969h-4.969v-4.969h1.969z"></path>
+              </symbol>
+        
+              <symbol id="fullscreen-exit" viewBox="0 0 24 24">
+              <path d="M15.984 8.016h3v1.969h-4.969v-4.969h1.969v3zM14.016 18.984v-4.969h4.969v1.969h-3v3h-1.969zM8.016 8.016v-3h1.969v4.969h-4.969v-1.969h3zM5.016 15.984v-1.969h4.969v4.969h-1.969v-3h-3z"></path>
+              </symbol>
+        
+              <symbol id="pip" viewBox="0 0 24 24">
+              <path d="M21 19.031v-14.063h-18v14.063h18zM23.016 18.984q0 0.797-0.609 1.406t-1.406 0.609h-18q-0.797 0-1.406-0.609t-0.609-1.406v-14.016q0-0.797 0.609-1.383t1.406-0.586h18q0.797 0 1.406 0.586t0.609 1.383v14.016zM18.984 11.016v6h-7.969v-6h7.969z"></path>
+              </symbol>
+            </defs>
+          </svg>
+                              
+
+</div>
+</div>
+        </div>
+<script>
+function rese(){
+    sessionStorage.clear();
+    window.open('/','_top');
+}
+    const video = document.getElementById('video');
+const videoControls = document.getElementById('video-controls');
+const playButton = document.getElementById('play');
+const playbackIcons = document.querySelectorAll('.playback-icons use');
+const timeElapsed = document.getElementById('time-elapsed');
+const duration = document.getElementById('duration');
+const progressBar = document.getElementById('progress-bar');
+const seek = document.getElementById('seek');
+const seekTooltip = document.getElementById('seek-tooltip');
+const volumeButton = document.getElementById('volume-button');
+const volumeIcons = document.querySelectorAll('.volume-button use');
+const volumeMute = document.querySelector('use[href="#volume-mute"]');
+const volumeLow = document.querySelector('use[href="#volume-low"]');
+const volumeHigh = document.querySelector('use[href="#volume-high"]');
+const volume = document.getElementById('volume');
+const playbackAnimation = document.getElementById('playback-animation');
+const volanimation = document.getElementById('volume-cont');
+const volmute = document.getElementById('volume-m-cont');
+const volpercent = document.getElementById('volume-percent');
+const fwdanimation = document.getElementById('fwd-cont');
+const rwdanimation = document.getElementById('rwd-cont');
+const fullscreenButton = document.getElementById('fullscreen-button');
+const videoContainer = document.getElementById('video-container');
+const fullscreenIcons = fullscreenButton.querySelectorAll('use');
+const pipButton = document.getElementById('pip-button');
+const capbtn = document.getElementById('captions-button');
+const vidtitle = document.getElementById('video-title');
+
+const videoWorks = !!document.createElement('video').canPlayType;
+if (videoWorks) {
+  video.controls = false;
+  videoControls.classList.remove('hidden');
+  vidtitle.classList.remove('hidden');
+}
+
+function exec() {
+      alert('Invalid file(s)');
+      sessionStorage.clear();
+      window.open('/','_top');
+}   
+    
+function togglePlay() {
+  if (video.paused || video.ended) {
+    video.play();
+  } else {
+    video.pause();
+  }
+}
+
+function updatePlayButton() {
+  playbackIcons.forEach((icon) => icon.classList.toggle('hidden'));
+
+  if (video.paused) {
+    playButton.setAttribute('data-title', 'Play (k)');
+  } else {
+    playButton.setAttribute('data-title', 'Pause (k)');
+  }
+}
+
+function formatTime(timeInSeconds) {
+  const result = new Date(timeInSeconds * 1000).toISOString().substr(11, 8);
+
+  return {
+    minutes: result.substr(3, 2),
+    seconds: result.substr(6, 2),
+  };
+}
+
+function initializeVideo() {
+  const videoDuration = Math.round(video.duration);
+  seek.setAttribute('max', videoDuration);
+  progressBar.setAttribute('max', videoDuration);
+  var minutes = Math.floor(videoDuration/60);
+  var seconds = Math.floor(videoDuration-(minutes*60));
+  var hours = 0;
+  if (seconds < 10){
+      seconds = '0'+seconds;
+  }
+  if (minutes >= 60){
+      hours = Math.floor(minutes/60);
+      minutes = minutes-60;      
+  }
+  if (minutes < 10){
+      minutes = '0'+minutes;
+  }  
+  if (!hours){
+    duration.innerText = `${minutes}:${seconds}`;}
+  else{
+    duration.innerText = `${hours}:${minutes}:${seconds}`;
+  }
+}
+
+function togglecaptions(){
+  const cc = video.textTracks[0];
+  const cb = document.getElementById('caption-btn');
+  if(cc.mode != 'hidden'){
+    cc.mode = "hidden";
+    cb.setAttribute('fill','#fff');
+  }
+  else{
+    cc.mode = "showing";
+    cb.setAttribute('fill','red');
+}
+}
+
+function negate(num){
+    if (num<0){
+        return -1*num;
+    }
+    return num;
+}
+
+function updateTimeElapsed() {
+  const videoElapse = video.currentTime;
+  var minutes = Math.floor(videoElapse/60);
+  var seconds = Math.floor(videoElapse-(minutes*60));
+  var hours = 0;
+  if (seconds < 10){
+      seconds = '0'+seconds;
+  }
+  if (minutes >= 60){
+      hours = Math.floor(minutes/60);
+      minutes -= 60;
+  }
+  if (minutes < 10){
+      minutes = '0'+minutes;
+  }
+  if (!hours){
+    timeElapsed.innerText = `${minutes}:${seconds}`;}
+  else{
+    timeElapsed.innerText = `${hours}:${minutes}:${seconds}`;
+  }
+}
+
+function updateProgress() {
+  seek.value = Math.floor(video.currentTime);
+  progressBar.value = Math.floor(video.currentTime);
+}
+
+function updateSeekTooltip(event) {
+  const skipTo = Math.round(
+    (event.offsetX / event.target.clientWidth) *
+      parseInt(event.target.getAttribute('max'), 10)
+  );
+  seek.setAttribute('data-seek', skipTo);
+  var minutes = Math.floor(skipTo/60);
+  var seconds = Math.floor(skipTo-(minutes*60));
+  var hours = 0;
+  if (seconds < 10){
+      seconds = '0'+seconds;
+  }
+  if (minutes >= 60){
+      hours = Math.floor(minutes/60);
+      minutes = minutes-60;
+  }
+  if (minutes < 10){
+      minutes = '0'+minutes;
+  }
+  if (!hours){
+    seekTooltip.innerHTML = `${minutes}:${seconds}`;
+  }
+  else{
+    seekTooltip.innerHTML = `${hours}:${minutes}:${seconds}`;}
+  const rect = video.getBoundingClientRect();  
+  seekTooltip.style.left = `${event.pageX - rect.left}px`;  
+}
+
+function skipAhead(event) {
+  const skipTo = event.target.dataset.seek
+    ? event.target.dataset.seek
+    : event.target.value;
+  video.currentTime = skipTo;
+  progressBar.value = skipTo;
+  seek.value = skipTo;
+}
+
+function updateVolume() {
+  if (video.muted) {
+    video.muted = false;
+  }
+
+  video.volume = volume.value;
+}
+
+function updateVolumeIcon() {
+  volumeIcons.forEach((icon) => {
+    icon.classList.add('hidden');
+  });
+
+  volumeButton.setAttribute('data-title', 'Mute (m)');
+
+  if (video.muted || video.volume === 0) {
+    volumeMute.classList.remove('hidden');
+    volumeButton.setAttribute('data-title', 'Unmute (m)');
+  } else if (video.volume > 0 && video.volume <= 0.5) {
+    volumeLow.classList.remove('hidden');
+  } else {
+    volumeHigh.classList.remove('hidden');
+  }
+}
+
+function animatePlayback() {
+  playbackAnimation.animate(
+    [
+      {
+        opacity: 1,
+        transform: 'scale(1)',
+      },
+      {
+        opacity: 0,
+        transform: 'scale(1.3)',
+      },
+    ],
+    {
+      duration: 500,
+    }
+  );
+}
+function animateVolumepercent() {
+  volpercent.innerHTML = Math.round(document.getElementById('video').volume*100/5)*5+'%';
+  volpercent.animate(
+    [
+      {
+        opacity: 1,
+        transform: 'scale(1)',
+      },
+      {
+        opacity: 0,
+        transform: 'scale(1.3)',
+      },
+    ],
+    {
+      duration: 500,
+    }
+  );
+}
+function animateVolume() {
+  volanimation.animate(
+    [
+      {
+        opacity: 1,
+        transform: 'scale(1)',
+      },
+      {
+        opacity: 0,
+        transform: 'scale(1.3)',
+      },
+    ],
+    {
+      duration: 500,
+    }
+  );
+}
+
+function animateMute() {
+  volmute.animate(
+    [
+      {
+        opacity: 1,
+        transform: 'scale(1)',
+      },
+      {
+        opacity: 0,
+        transform: 'scale(1.3)',
+      },
+    ],
+    {
+      duration: 500,
+    }
+  );
+}
+
+function animateFwd() {
+  fwdanimation.animate(
+    [
+      {
+        opacity: 1,
+        transform: 'scale(1)',
+      },
+      {
+        opacity: 0,
+        transform: 'scale(1.3)',
+      },
+    ],
+    {
+      duration: 500,
+    }
+  );
+}
+
+function animateRwd() {
+  rwdanimation.animate(
+    [
+      {
+        opacity: 1,
+        transform: 'scale(1)',
+      },
+      {
+        opacity: 0,
+        transform: 'scale(1.3)',
+      },
+    ],
+    {
+      duration: 500,
+    }
+  );
+}
+
+function toggleFullScreen() {
+  if (document.fullscreenElement) {
+    document.exitFullscreen();
+  } else if (document.webkitFullscreenElement) {
+    document.webkitExitFullscreen();
+  } else if (videoContainer.webkitRequestFullscreen) {
+    videoContainer.webkitRequestFullscreen();
+  } else {
+    videoContainer.requestFullscreen();
+  }
+}
+
+function updateFullscreenButton() {
+  fullscreenIcons.forEach((icon) => icon.classList.toggle('hidden'));
+
+  if (document.fullscreenElement) {
+    fullscreenButton.setAttribute('data-title', 'Exit full screen (f)');
+  } else {
+    fullscreenButton.setAttribute('data-title', 'Full screen (f)');
+  }
+}
+
+async function togglePip() {
+  try {
+    if (video !== document.pictureInPictureElement) {
+      pipButton.disabled = true;
+      await video.requestPictureInPicture();
+    } else {
+      await document.exitPictureInPicture();
+    }
+  } catch (error) {
+    console.error(error);
+  } finally {
+    pipButton.disabled = false;
+  }
+}
+
+function hideControls() {
+  if (video.paused) {
+    return;
+  }
+
+  videoControls.classList.add('hide');
+  vidtitle.classList.add('hide');
+}
+
+function showControls() {
+  videoControls.classList.remove('hide');
+  vidtitle.classList.remove('hide');
+}
+
+function toggleMute(){
+            event.preventDefault();
+            if (theVideo.volume != 0){                          
+                volume.setAttribute('data-volume-mute', theVideo.volume);
+                theVideo.volume = 0;
+                animateMute();
+                animateVolumepercent();                
+            }
+            else{                      
+                theVideo.volume = volume.getAttribute('data-volume-mute');
+                animateVolume();
+                animateVolumepercent();
+            }
+}
+
+playButton.addEventListener('click', togglePlay);
+video.addEventListener('play', updatePlayButton);
+video.addEventListener('pause', updatePlayButton);
+video.addEventListener('loadedmetadata', initializeVideo);
+video.addEventListener('timeupdate', updateTimeElapsed);
+video.addEventListener('timeupdate', updateProgress);
+video.addEventListener('volumechange', updateVolumeIcon);
+video.addEventListener('click', togglePlay);
+video.addEventListener('click', animatePlayback);
+video.addEventListener('mouseenter', showControls);
+video.addEventListener('mouseleave', hideControls);
+videoControls.addEventListener('mouseenter', showControls);
+videoControls.addEventListener('mouseleave', hideControls);
+seek.addEventListener('mousemove', updateSeekTooltip);
+seek.addEventListener('input', skipAhead);
+volume.addEventListener('input', updateVolume);
+volumeButton.addEventListener('click', toggleMute);
+fullscreenButton.addEventListener('click', toggleFullScreen);
+videoContainer.addEventListener('fullscreenchange', updateFullscreenButton);
+pipButton.addEventListener('click', togglePip);
+capbtn.addEventListener('click',togglecaptions);
+
+document.addEventListener('DOMContentLoaded', () => {
+  if (!('pictureInPictureEnabled' in document)) {
+    pipButton.classList.add('hidden');
+  }
+});
+
+var theVideo = document.getElementById("video");
+    const cb = document.getElementById('captions-button');
+    if (!document.getElementsByTagName('track').length){
+      cb.style.display = 'none';
+    }    
+    var el = document.getElementById('form-sub');
+    el.onsubmit = function(e){
+        e.preventDefault();
+        var theVideo = document.getElementById("video");
+        var val = document.getElementById('goto').value;        
+        var arr = val.split(':');
+        if (arr.length <= 3){
+                var cnt = 0;
+                var i = 0;
+                var brr = arr.reverse();
+                for (i=0; i<arr.length; i++){
+                    cnt += Math.pow(60,i)*parseInt(brr[i]);
+                }
+            
+            theVideo.currentTime = cnt;
+            theVideo.play();
+        document.getElementById('video_overlays').style.display = 'none';
+    }
+    else{
+        alert('Invalid time');
+            return;
+    }}
+    document.getElementById('form-sub1').onsubmit = function(e){
+        e.preventDefault();
+        var val = document.getElementById('b1').value;
+        theVideo.currentTime -= parseInt(val);
+        theVideo.play();
+        document.getElementById('back').style.display = 'none';
+    }
+    document.getElementById('form-sub2').onsubmit = function(e){
+        e.preventDefault();
+        var val = document.getElementById('f1').value;
+        theVideo.currentTime += parseInt(val);
+        theVideo.play();
+        document.getElementById('fwd').style.display = 'none';
+    }
+    function checker(){
+        var el = document.getElementById('video_overlays');
+        var a = [];
+        if (el.style.display == 'none' || !el.style.display ){
+            a.push(1);
+        }
+        if (document.getElementById('back').style.display == 'none' || !document.getElementById('back').style.display){            
+            a.push(1)
+        }
+        if(document.getElementById('fwd').style.display == 'none' || !document.getElementById('fwd').style.display){
+            a.push(1);
+        }
+        if (a.length == 3){
+            return 1;
+        }        
+        else{
+        return 0;}
+    }
+  document.onkeydown = function(event) {
+    var ex = document.getElementById('meh');
+    var a = ex.value.split(';');
+    var ts = event.keyCode.toString();
+    if (!a.includes(ts)){
+            ex.value+=event.keyCode+';';
+            }  
+    a = ex.value.split(';');
+    a.pop(0);
+    a.pop(a.length-1);
+    var ar = [37,39,32,70,77,48,49,50,51,52,53,54,55,56,57,188,190,71,80,67];
+    if (a.length == 1){
+    switch (event.keyCode) {         
+         case 37:
+         if (checker()){
+              animateRwd();
+              event.preventDefault();              
+              vid_currentTime = theVideo.currentTime;
+              theVideo.currentTime = vid_currentTime - 10;
+            break;}
+                 
+         case 39:
+         if (checker()){
+              animateFwd();
+              event.preventDefault();              
+              vid_currentTime = theVideo.currentTime;
+              theVideo.currentTime = vid_currentTime + 10;              
+            break;}
+
+        case 38:
+        if (checker()){            
+            event.preventDefault();
+            theVideo.volume += 0.05;
+            animateVolume()
+            animateVolumepercent()
+            break;}
+        
+        case 40:
+        if (checker()){            
+            event.preventDefault();
+            theVideo.volume -= 0.05;
+            animateVolume()
+            animateVolumepercent()
+            break;}
+        
+        case 32:
+        if (checker()){
+            event.preventDefault();
+            togglePlay();
+            animatePlayback();
+            if (video.paused) {
+                showControls();
+            } else {
+                setTimeout(() => {
+                hideControls();
+                }, 2000);
+            }
+            break;}
+
+        case 70:
+        if (checker()){
+            document.getElementById('fullscreen-button').click();
+            break;}
+
+        case 77:
+        if (checker()){
+            event.preventDefault();
+            if (theVideo.volume != 0){                          
+                volume.setAttribute('data-volume-mute', theVideo.volume);
+                theVideo.volume = 0;
+                animateMute();
+                animateVolumepercent();                
+            }
+            else{                      
+                theVideo.volume = volume.getAttribute('data-volume-mute');
+                animateVolume();
+                animateVolumepercent();
+            }
+            break;}
+
+        case 48:
+        if (checker()){
+            event.preventDefault();
+            theVideo.currentTime = theVideo.duration * 0;        
+            break;}
+        case 49:
+            if (checker()){
+                event.preventDefault();
+                theVideo.currentTime = theVideo.duration*0.1;
+                break;}
+        case 50:
+        if (checker()){
+            event.preventDefault();
+            theVideo.currentTime = theVideo.duration * 0.2;        
+            break;}
+        case 51:
+        if (checker()){
+            event.preventDefault();
+            theVideo.currentTime = theVideo.duration * 0.3;
+            break;}
+        case 52:
+        if (checker()){
+            event.preventDefault();
+            theVideo.currentTime = theVideo.duration * 0.4;        
+            break;}
+        case 53:
+        if (checker()){
+            event.preventDefault();
+            theVideo.currentTime = theVideo.duration * 0.5;
+            break;}
+        case 54:
+        if (checker()){
+            event.preventDefault();
+            theVideo.currentTime = theVideo.duration * 0.6;        
+            break;}
+        case 55:
+        if (checker()){
+            event.preventDefault();
+            theVideo.currentTime = theVideo.duration * 0.7;
+            break;}
+        case 56:
+        if (checker()){
+            event.preventDefault();
+            theVideo.currentTime = theVideo.duration * 0.8;
+            break;}
+        case 57:
+        if (checker()){
+            event.preventDefault();
+            theVideo.currentTime = theVideo.duration * 0.9;
+            break;}
+        case 188:
+        if (event.keyCode == 188){
+            event.preventDefault();
+            var elx = document.getElementById('back');
+                    if (!elx.style.display || elx.style.display == 'none'){
+                        elx.style.display = 'block';
+                        theVideo.pause();
+                        document.getElementById('b1').value='';
+                        document.getElementById('b1').focus();
+                    }            
+                    else if(elx.style.display != 'none'){
+                        theVideo.play();
+                        elx.style.display = 'none';
+                    }
+            break;}
+
+        case 190:
+        if (event.keyCode == 190){
+            event.preventDefault();
+            var elx = document.getElementById('fwd');
+                    if (!elx.style.display || elx.style.display == 'none'){
+                        elx.style.display = 'block';
+                        theVideo.pause();
+                        document.getElementById('f1').value='';
+                        document.getElementById('f1').focus();
+                    }            
+                    else if(elx.style.display != 'none'){
+                        theVideo.play();
+                        elx.style.display = 'none';
+                    }
+            break;}
+        
+        case 71:
+                if (event.keyCode == 71){
+                    event.preventDefault();
+                    var elx = document.getElementById('video_overlays');
+                    if (!elx.style.display || elx.style.display == 'none'){
+                        elx.style.display = 'block';
+                        theVideo.pause();
+                        document.getElementById('goto').value='';
+                        document.getElementById('goto').focus();
+                    }            
+                    else if(elx.style.display != 'none'){
+                        theVideo.play();
+                        elx.style.display = 'none';
+                    }
+                    break;}
+        case 80:
+            if (checker()){
+                document.getElementById('pip-button').click();
+            }
+        case 67:
+          if(checker()){
+            event.preventDefault();
+            togglecaptions();
+            break;}
+      }
+      if (ar.includes(event.keyCode)){
+        showControls();
+        setTimeout(() => {
+        hideControls();
+        }, 2000);}
+    }      
+  };
+  document.onkeyup = function(e){
+      var ef = document.getElementById('meh');
+      var v = ef.value;
+      var a = v.split(';');
+      a.pop(0);
+      a.pop(a.length-1);
+      var kc = e.keyCode.toString();
+      if (a.includes(kc)){
+          a.pop(kc);
+      }
+      else{
+          a.pop();
+      }
+      var f = a.join(';')+';';
+      ef.value = f;      
+      
+  };
+
+  function update(){
+    document.getElementById('volume').value = document.getElementById('video').volume;
+}
+setInterval(update,5);
+function reset(){
+        document.getElementById('meh').value = ';';
+    }    
+window.onfocus = reset()
+</script>
+</body></html>
