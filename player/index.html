@@ -10,7 +10,7 @@
             var ch = 1;
             if (s===null || t===null){
               ch = 0;
-              window.open('/','_top');
+              window.open('../index.html','_top');
             }
             document.getElementById('video-title').innerHTML = '<center><br>'+t+'</center>';
             document.getElementById('video').setAttribute('src',s);
@@ -238,7 +238,7 @@ fill="#fff" stroke="none">
 <script>
 function rese(){
     sessionStorage.clear();
-    window.open('/','_top');
+    window.open('../index.html','_top');
 }
     const video = document.getElementById('video');
 const videoControls = document.getElementById('video-controls');
@@ -278,7 +278,7 @@ if (videoWorks) {
 function exec() {
       alert('Invalid file(s)');
       sessionStorage.clear();
-      window.open('/','_top');
+      window.open('../index.html','_top');
 }   
     
 function togglePlay() {

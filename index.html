@@ -5,7 +5,7 @@
 
 @font-face {
     font-family: yt-font;
-    src: url('/src/font.woff');
+    src: url('src/font.woff');
 }
 :root {
     --youtube-red: #FE0900;
@@ -87,7 +87,7 @@ html{
 <center><button id="sub2" style="display: none">RESET</button></center>
 </div>
 <script>
-document.getElementById('sub2').onclick = function(){window.open('/','_top');};
+document.getElementById('sub2').onclick = function(){location.reload();};
 function chng(){
     var btn = document.getElementById('sub2');
     if (btn.style.display == 'none'){
@@ -143,7 +143,7 @@ document.getElementById('fileform').onsubmit = function(e){
   sessionStorage.setItem('t',document.getElementById('imgInp1').value.split('\\')[2])
   sessionStorage.setItem('s',document.getElementById('s').value);
   sessionStorage.setItem('c',document.getElementById('c').value)
-  window.open('/player','_top');
+  window.open('player/index.html','_top');
 }
 </script>
 </body>
