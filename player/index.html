@@ -124,6 +124,7 @@
                       <svg>
                         <use href="#captions-logo"></use>
                       </svg>
+                      <hr style="height:2px;border-width:0;width:80%;background-color:var(--youtube-red);margin: 0 auto;">
                     </button>
                     <button data-title="PIP (p)" class="pip-button" id="pip-button">
                       <svg>
@@ -337,11 +338,11 @@ function togglecaptions(){
   const cb = document.getElementById('caption-btn');
   if(cc.mode != 'hidden'){
     cc.mode = "hidden";
-    cb.setAttribute('fill','#fff');
+    document.getElementsByTagName('hr')[0].style.display = 'none';
   }
   else{
     cc.mode = "showing";
-    cb.setAttribute('fill','red');
+    document.getElementsByTagName('hr')[0].style.display = 'block';
 }
 }
 
